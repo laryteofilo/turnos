@@ -397,7 +397,26 @@ textarea {
     padding: 12px;
   }
 }
-</style>
+/* Destaca o dia atual */
+.dia-hoy {
+  background-color: #eef5ff !important;
+}
+
+th.dia-hoy {
+  background-color: #dbeafe !important;
+  border-top: 3px solid #2563eb;
+}
+
+.etiqueta-hoy {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+}</style>
 </head>
 
 <body>
@@ -692,7 +711,21 @@ function renderizar() {
     }
 
     document.getElementById("dia" + i).innerHTML = conteudo;
-  }
+  }// Destacar o dia de hoje
+const hoje = new Date();
+const cabecalho = document.getElementById("dia" + i);
+
+const ehHoje =
+  data.getDate() === hoje.getDate() &&
+  data.getMonth() === hoje.getMonth() &&
+  data.getFullYear() === hoje.getFullYear();
+
+if (ehHoje) {
+  cabecalho.classList.add("dia-hoy");
+  cabecalho.innerHTML += '<br><span class="etiqueta-hoy">HOY</span>';
+} else {
+  cabecalho.classList.remove("dia-hoy");
+}
 
   const fim = new Date(inicioSemana);
 
@@ -744,7 +777,19 @@ function renderizar() {
       const td = document.createElement("td");
 
       td.className = "turno";
+// Destacar a coluna do dia de hoje
+const dataCelula = new Date(inicioSemana);
+dataCelula.setDate(inicioSemana.getDate() + d);
 
+const hojeCelula = new Date();
+
+if (
+  dataCelula.getDate() === hojeCelula.getDate() &&
+  dataCelula.getMonth() === hojeCelula.getMonth() &&
+  dataCelula.getFullYear() === hojeCelula.getFullYear()
+) {
+  td.classList.add("dia-hoy");
+}
       if(d >= 5) {
         td.classList.add("fds");
       }
@@ -815,7 +860,22 @@ function criarLinhaEspecial(
 
     const td = document.createElement("td");
 
-    td.className =
+  td.className =
+  "especial " + classe;
+
+// Destacar o dia de hoje em Descanso e Vacaciones
+const dataCelula = new Date(inicioSemana);
+dataCelula.setDate(inicioSemana.getDate() + d);
+
+const hojeCelula = new Date();
+
+if (
+  dataCelula.getDate() === hojeCelula.getDate() &&
+  dataCelula.getMonth() === hojeCelula.getMonth() &&
+  dataCelula.getFullYear() === hojeCelula.getFullYear()
+) {
+  td.classList.add("dia-hoy");
+}
       "especial " + classe;
 
     td.dataset.tipo = tipo;
