@@ -607,9 +607,26 @@ th.dia-hoje {
 
 </div>
 
-<script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+  <script>
 
-const horarios = [
+const firebaseConfig = {
+  apiKey: "AIzaSyD0TFBC6By8Uue6MDE5omxEeGYHepYsP6U",
+  authDomain: "horario-sirplay.firebaseapp.com",
+  projectId: "horario-sirplay",
+  storageBucket: "horario-sirplay.firebasestorage.app",
+  messagingSenderId: "737254739017",
+  appId: "1:737254739017:web:abddc4f5928bbed1abc398",
+  measurementId: "G-YB0N76TEDL"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+const auth = firebase.auth();
+    const horarios = [
   "08:00 - 17:00",
   "09:00 - 18:00",
   "10:00 - 19:00",
