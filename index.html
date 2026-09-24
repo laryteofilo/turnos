@@ -443,6 +443,9 @@ th.dia-hoje {
       <button class="btn-secundario" onclick="mudarSemana(7)">
         Próxima semana →
       </button>
+      <button class="btn-secundario" onclick="migrarDadosParaFirebase()">
+  ☁️ Enviar para Firebase
+</button>
     </div>
 
     <div class="semana" id="semanaTitulo"></div>
@@ -705,7 +708,39 @@ function salvarDados() {
   );
 }
 
-/* RENDERIZAÇÃO */
+
+    async function migrarDadosParaFirebase() {
+  try {
+    const dadosLocais = localStorage.getItem("escala-turnos-v2");
+
+    if (!dadosLocais) {
+      alert("Nenhuma escala local encontrada.");
+      return;
+    }
+
+    const observacoes = {};
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const chave = localStorage.key(i);
+
+      if (chave && chave.startsWith("obs-v2-")) {
+        observacoes[chave] = localStorage.getItem(chave);
+      }
+    }
+
+    await db.collection("dados").doc("escala").set({
+      escala: JSON.parse(dadosLocais),
+      observacoes: observacoes,
+      atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("Escala enviada para o Firebase com sucesso!");
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro ao enviar a escala para o Firebase.");
+  }
+}
+    /* RENDERIZAÇÃO */
 
 function renderizar() {
 
