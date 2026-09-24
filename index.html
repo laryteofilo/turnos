@@ -446,6 +446,13 @@ th.dia-hoje {
       <button class="btn-secundario" onclick="migrarDadosParaFirebase()">
   ☁️ Enviar para Firebase
 </button>
+      <button class="btn-secundario" onclick="loginAdmin()">
+  🔐 Entrar como admin
+</button>
+
+<button class="btn-secundario" id="btnSair" onclick="logoutAdmin()" style="display:none;">
+  🚪 Sair
+</button>
     </div>
 
     <div class="semana" id="semanaTitulo"></div>
@@ -740,6 +747,40 @@ function salvarDados() {
     alert("Erro ao enviar a escala para o Firebase.");
   }
 }
+    async function loginAdmin() {
+  const email = prompt("Digite seu e-mail de administrador:");
+
+  if (!email) return;
+
+  const senha = prompt("Digite sua senha:");
+
+  if (!senha) return;
+
+  try {
+    await auth.signInWithEmailAndPassword(email, senha);
+    alert("Login realizado com sucesso!");
+  } catch (erro) {
+    console.error(erro);
+    alert("Não foi possível entrar. Verifique o e-mail e a senha.");
+  }
+}
+
+async function logoutAdmin() {
+  try {
+    await auth.signOut();
+    alert("Você saiu do modo administrador.");
+  } catch (erro) {
+    console.error(erro);
+  }
+}
+
+auth.onAuthStateChanged((usuario) => {
+  const btnSair = document.getElementById("btnSair");
+
+  if (btnSair) {
+    btnSair.style.display = usuario ? "inline-block" : "none";
+  }
+});
     /* RENDERIZAÇÃO */
 
 function renderizar() {
