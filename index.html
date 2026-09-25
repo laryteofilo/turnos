@@ -443,10 +443,8 @@ th.dia-hoje {
       <button class="btn-secundario" onclick="mudarSemana(7)">
         Próxima semana →
       </button>
-      <button class="btn-secundario" onclick="migrarDadosParaFirebase()">
-  ☁️ Enviar para Firebase
-</button>
-      <button class="btn-secundario" onclick="loginAdmin()">
+    
+      <button class="btn-secundario" id="btnEntrar" onclick="loginAdmin()">
   🔐 Entrar como admin
 </button>
 
@@ -692,29 +690,73 @@ function chaveSemana() {
 
 /* SALVAMENTO */
 
-function carregarDados() {
+async function carregarDados() {
+  try {
+    const documento = await db.collection("dados").doc("escala").get();
 
-  const salvo = localStorage.getItem("escala-turnos-v2");
+    if (documento.exists) {
+      const dados = documento.data();
 
-  if(salvo) {
+      escala = dados.escala || {};
 
-    try {
-      escala = JSON.parse(salvo);
-    } catch {
-      escala = {};
+      if (dados.observacoes) {
+        Object.entries(dados.observacoes).forEach(([chave, valor]) => {
+          localStorage.setItem(chave, valor);
+        });
+      }
+
+      localStorage.setItem(
+        "escala-turnos-v2",
+        JSON.stringify(escala)
+      );
+    } else {
+      console.log("Nenhuma escala encontrada no Firebase.");
     }
 
+  } catch (erro) {
+    console.error("Erro ao carregar dados do Firebase:", erro);
+
+    // Se houver algum problema com o Firebase,
+    // mantém o backup local disponível.
+    const salvo = localStorage.getItem("escala-turnos-v2");
+
+    if (salvo) {
+      try {
+        escala = JSON.parse(salvo);
+      } catch {
+        escala = {};
+      }
+    }
   }
 }
 
-function salvarDados() {
+async function salvarDados() {
 
+  // Mantém uma cópia de segurança no navegador
   localStorage.setItem(
     "escala-turnos-v2",
     JSON.stringify(escala)
   );
-}
 
+  // Somente usuário autenticado pode alterar o Firebase
+  if (!auth.currentUser) {
+    alert("Você precisa entrar como administrador para editar a escala.");
+    return;
+  }
+
+  try {
+    await db.collection("dados").doc("escala").update({
+      escala: escala,
+      atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log("Alterações salvas no Firebase.");
+
+  } catch (erro) {
+    console.error("Erro ao salvar no Firebase:", erro);
+    alert("Não foi possível salvar a alteração no Firebase.");
+  }
+}
 
     async function migrarDadosParaFirebase() {
   try {
@@ -775,11 +817,18 @@ async function logoutAdmin() {
 }
 
 auth.onAuthStateChanged((usuario) => {
+
+  const btnEntrar = document.getElementById("btnEntrar");
   const btnSair = document.getElementById("btnSair");
+
+  if (btnEntrar) {
+    btnEntrar.style.display = usuario ? "none" : "inline-block";
+  }
 
   if (btnSair) {
     btnSair.style.display = usuario ? "inline-block" : "none";
   }
+
 });
     /* RENDERIZAÇÃO */
 
@@ -982,8 +1031,11 @@ function preencherPessoas(td, selecionados) {
 
 function abrirModal(td) {
 
+  
+  if (!auth.currentUser) {
+    return;
+  }
   celulaAtual = td;
-
   tipoAtual = td.dataset.tipo;
 
   document
@@ -1150,15 +1202,34 @@ function irHoje() {
 
 const observacao =
   document.getElementById("observacao");
-
 observacao.addEventListener(
   "input",
-  () => {
+  async () => {
 
+    const chaveObs = "obs-v2-" + chaveSemana();
+
+    // Backup local
     localStorage.setItem(
-      "obs-v2-" + chaveSemana(),
+      chaveObs,
       observacao.value
     );
+
+    // Se não estiver logado, não altera o Firebase
+    if (!auth.currentUser) {
+      return;
+    }
+
+    try {
+      await db.collection("dados").doc("escala").update({
+        ["observacoes." + chaveObs]: observacao.value,
+        atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      console.log("Observação salva no Firebase.");
+
+    } catch (erro) {
+      console.error("Erro ao salvar observação:", erro);
+    }
 
   }
 );
@@ -1188,9 +1259,10 @@ document
 
 /* INICIAR */
 
-carregarDados();
-
-renderizar();
+carregarDados().then(() => {
+  renderizar();
+  destacarDiaHoje();
+});
 
 // Destacar a coluna correspondente ao dia de hoje
 function destacarDiaHoje() {
@@ -1234,9 +1306,12 @@ function destacarDiaHoje() {
 
     });
 }
-  destacarDiaHoje();
+     });
+}
 
 </script>
 
 </body>
 </html>
+
+
