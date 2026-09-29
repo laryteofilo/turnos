@@ -418,91 +418,116 @@ th.dia-hoje {
 th.dia-hoje {
   background-color: #dbeafe !important;
 
-/* TURNO ITÁLIA */
+/* ===== TURNO ITÁLIA ===== */
 
-.turno-italia {
-  margin-top: 18px;
+.bloco-italia {
+  margin-top: 22px;
   margin-bottom: 18px;
-  border: 1px solid #ddd6fe;
+  background: #ffffff;
+  border: 1px solid #d8dee9;
   border-radius: 10px;
   overflow: hidden;
-  background: #ffffff;
 }
 
-.turno-italia-titulo {
-  background: #f5f3ff;
-  border-bottom: 1px solid #ddd6fe;
+.cabecalho-italia {
   padding: 14px 18px;
-}
-
-.turno-italia-titulo strong {
-  display: block;
-  color: #4c1d95;
-  font-size: 17px;
-  margin-bottom: 5px;
-}
-
-.turno-italia-titulo span {
-  color: #6b7280;
-  font-size: 12px;
-}
-
-.turno-italia-tabela {
-  display: grid;
-  grid-template-columns: 1.35fr repeat(7, 1fr);
-}
-
-.italia-horario,
-.italia-dia,
-.italia-finde {
-  min-height: 75px;
-  padding: 10px 8px;
-  border-right: 1px solid #e5e7eb;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-align: center;
-}
-
-.italia-horario {
   background: #f8fafc;
-  color: #111827;
-  font-size: 14px;
+  border-bottom: 1px solid #d8dee9;
 }
 
-.italia-dia strong,
-.italia-finde strong {
-  font-size: 11px;
-  color: #111827;
+.cabecalho-italia strong {
+  display: block;
+  font-size: 15px;
+  color: #172033;
+  margin-bottom: 4px;
 }
 
-.italia-dia span {
-  width: 90%;
-  background: #8b5cf6;
-  color: white;
-  border-radius: 5px;
-  padding: 7px 5px;
+.cabecalho-italia small {
+  color: #64748b;
   font-size: 12px;
+}
+
+/* Tabela */
+
+.tabela-italia {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.tabela-italia th,
+.tabela-italia td {
+  border-right: 1px solid #d8dee9;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tabela-italia th:last-child,
+.tabela-italia td:last-child {
+  border-right: none;
+}
+
+.tabela-italia th {
+  height: 54px;
+  padding: 6px;
+  background: #eef2ff;
+  font-size: 11px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.tabela-italia td {
+  height: 52px;
+  padding: 7px;
+  background: #ffffff;
+  font-size: 12px;
+}
+
+/* Primeira coluna */
+
+.tabela-italia th:first-child,
+.tabela-italia td:first-child {
+  width: 175px;
+}
+
+.horario-italia {
   font-weight: 600;
+  color: #172033;
+  white-space: nowrap;
 }
 
-.italia-finde {
-  background: #fffbeb;
+/* Operadores */
+
+.equipe-italia {
+  display: block;
+  padding: 7px 4px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  color: #334155;
+  font-weight: 600;
+  font-size: 11px;
 }
 
-.italia-finde span {
+/* Sábado e domingo */
+
+.tabela-italia .fim-semana {
+  background: #fff9e6;
+}
+
+.italia-vazio {
   color: #9ca3af;
   font-size: 18px;
 }
 
+/* Celular */
+
 @media (max-width: 900px) {
-  .turno-italia {
+  .bloco-italia {
     overflow-x: auto;
   }
 
-  .turno-italia-tabela {
+  .tabela-italia {
     min-width: 900px;
   }
 }
@@ -602,6 +627,51 @@ th.dia-hoje {
     </div>
 
   </div>
+<!-- TURNO ITÁLIA NOVO -->
+<div class="bloco-italia">
+
+  <div class="cabecalho-italia">
+    <div>
+      <strong>☀️ Turno Itália — Horário do Peru (03h – 12h)</strong>
+      <small>📅 Segunda a sexta</small>
+    </div>
+  </div>
+
+  <table class="tabela-italia">
+
+    <thead>
+      <tr>
+        <th>HORÁRIO</th>
+        <th id="italiaDia0"></th>
+        <th id="italiaDia1"></th>
+        <th id="italiaDia2"></th>
+        <th id="italiaDia3"></th>
+        <th id="italiaDia4"></th>
+        <th class="fim-semana" id="italiaDia5"></th>
+        <th class="fim-semana" id="italiaDia6"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td class="horario-italia">
+          🕒 <strong>03:00 - 12:00</strong>
+        </td>
+
+        <td><span class="equipe-italia">Giusy · Guido · Anna</span></td>
+        <td><span class="equipe-italia">Giusy · Guido · Anna</span></td>
+        <td><span class="equipe-italia">Giusy · Guido · Anna</span></td>
+        <td><span class="equipe-italia">Giusy · Guido · Anna</span></td>
+        <td><span class="equipe-italia">Giusy · Guido · Anna</span></td>
+
+        <td class="fim-semana"><span class="italia-vazio">+</span></td>
+        <td class="fim-semana"><span class="italia-vazio">+</span></td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>
 
   <div class="legenda">
 
@@ -632,62 +702,7 @@ th.dia-hoje {
 
   </div>
 
- <!-- TURNO ITÁLIA -->
-<div class="turno-italia">
-
-  <div class="turno-italia-titulo">
-    <div>
-      <strong>☀️ Turno Itália — Horário do Peru (03h – 12h)</strong>
-      <span>📅 Segunda a sexta</span>
-    </div>
-  </div>
-
-  <div class="turno-italia-tabela">
-
-    <div class="italia-horario">
-      🕒 <strong>03:00 - 12:00</strong>
-    </div>
-
-    <div class="italia-dia">
-      <strong>LUNES</strong>
-      <span>Giusy · Guido · Anna</span>
-    </div>
-
-    <div class="italia-dia">
-      <strong>MARTES</strong>
-      <span>Giusy · Guido · Anna</span>
-    </div>
-
-    <div class="italia-dia">
-      <strong>MIÉRCOLES</strong>
-      <span>Giusy · Guido · Anna</span>
-    </div>
-
-    <div class="italia-dia">
-      <strong>JUEVES</strong>
-      <span>Giusy · Guido · Anna</span>
-    </div>
-
-    <div class="italia-dia">
-      <strong>VIERNES</strong>
-      <span>Giusy · Guido · Anna</span>
-    </div>
-
-    <div class="italia-finde">
-      <strong>SÁBADO</strong>
-      <span>—</span>
-    </div>
-
-    <div class="italia-finde">
-      <strong>DOMINGO</strong>
-      <span>—</span>
-    </div>
-
-  </div>
-
-</div>
-  
-  <div class="observacoes">
+<div class="observacoes">
 
     <div class="aviso-fds">
       📌 <strong>Sábado e domingo:</strong>
@@ -999,7 +1014,11 @@ function renderizar() {
     }
 
     document.getElementById("dia" + i).innerHTML = conteudo;
-  }
+const diaItalia = document.getElementById("italiaDia" + i);
+
+if (diaItalia) {
+  diaItalia.innerHTML = conteudo;
+}  }
 
   const fim = new Date(inicioSemana);
 
