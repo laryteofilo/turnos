@@ -531,6 +531,40 @@ th.dia-hoje {
     min-width: 900px;
   }
 }
+
+  /* ===== IMPRESSÃO EM PDF ===== */
+@media print {
+
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .navegacao {
+    display: none !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  table {
+    width: 100% !important;
+    font-size: 10px !important;
+  }
+
+  .bloco-italia,
+  .observacoes {
+    break-inside: avoid;
+  }
+}
   
 }</style>
 </head>
@@ -565,6 +599,9 @@ th.dia-hoje {
 
 <button class="btn-secundario" id="btnSair" onclick="logoutAdmin()" style="display:none;">
   🚪 Sair
+</button>
+      <button class="btn-secundario" onclick="window.print()">
+  📄 Descargar PDF
 </button>
     </div>
 
